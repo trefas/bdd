@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<fx:root prefWidth="161.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <TextField fx:id="tf" layoutX="7.0" minWidth="161.0" promptText="0(I)Rh- D-C-E-c-e-K-" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <padding>
+         <Insets bottom="5.0" left="5.0" right="50.0" top="5.0" />
+      </padding></TextField>
+   <SVGPath content="m 4.1824561,5.277193c 0.7060966,1.3807642 1.383099,-1.1148172 2.3578948,0M 4.5586613,1.6252857c -0.2987349,0 -0.5407093,0.2944055 -0.5407093,0.6523812 0,0.1789878 0.059558,0.3446595 0.1598967,0.4630669 0.098059,0.1184073 0.2348124,0.1898521 0.3830397,0.1898521H 4.629034L 4.5404002,3.1726069 4.1319731,4.2934333 3.9885559,4.687121 3.6598545,5.587977c -0.3101371,0.8481269 -0.1185454,1.5446322 0.83467,1.5446322h 1.749066c 0.9440938,0 1.1447536,-0.6938158 0.8368971,-1.5419429L 6.1184342,2.9305859h 0.036524c 0.2531268,0 0.4902729,-0.19579 0.5518442,-0.4931851C 6.7546898,2.1978324 6.6906419,1.9720318 6.5629388,1.8178269 6.4648804,1.6994195 6.3304066,1.6252857 6.1798988,1.6252857Z" fill="TRANSPARENT" scaleX="2.4" scaleY="2.4" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="10.0" />
+</fx:root>

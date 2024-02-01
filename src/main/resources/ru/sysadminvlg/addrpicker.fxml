@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <TextField fx:id="address" editable="false" minWidth="161.0" promptText="Адрес не указан" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <padding>
+         <Insets bottom="5.0" left="5.0" right="50.0" top="5.0" />
+      </padding></TextField>
+   <SVGPath content="m 16,0v 4.27l 4.27,0 -0,12.8 1.07,0V 19.2L 16,19.2V 19.2H 5.33L 5.33,19.2 0,19.2V 17.07L 1.07,17.07 1.07,7.47 5.33,7.47 5.33,0Zm -2.13,2.13h -6.4v 14.93H 9.6v -3.2h 2.13v 3.2h 2.13zM 18.13,6.4H 16v 10.67h 2.13zm -12.8,3.2H 3.2v 7.47h 2.13zm 6.4,-1.07v 2.13H 9.6v -2.13zm 0,-4.27V 6.4H 9.6V 4.27Z" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+</fx:root>

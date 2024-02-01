@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root prefHeight="79.0" prefWidth="291.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <GridPane hgap="5.0" vgap="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+        <RadioButton text="0(I)" toggleGroup="$bg">
+         <toggleGroup>
+            <ToggleGroup fx:id="bg" />
+         </toggleGroup></RadioButton>
+        <RadioButton text="A(II)" toggleGroup="$bg" GridPane.rowIndex="1" />
+        <RadioButton text="B(III)" toggleGroup="$bg" GridPane.columnIndex="1" />
+        <RadioButton text="AB(IV)" toggleGroup="$bg" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <CheckBox fx:id="rh" text="Rh(Ag D)" GridPane.columnIndex="2" />
+        <CheckBox fx:id="AgK" text="Ag Kell" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <CheckBox fx:id="AgC" text="Ag C" GridPane.columnIndex="3" />
+        <CheckBox fx:id="Agc" text="Ag c" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+        <CheckBox fx:id="AgE" text="Ag E" GridPane.columnIndex="4" />
+        <CheckBox fx:id="Age" text="Ag e" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+    </GridPane>
+   <Button fx:id="btn" text="Готово" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+</fx:root>
