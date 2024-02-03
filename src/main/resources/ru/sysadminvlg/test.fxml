@@ -131,6 +131,14 @@
                   <Insets left="20.0" />
                </HBox.margin>
             </Button>
+            <Label fx:id="numbl" text="" textFill="#8c8c8c">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="15.0" />
+               </HBox.margin>
+            </Label>
          </HBox>
          <TableView fx:id="blood" VBox.vgrow="ALWAYS">
             <columns>

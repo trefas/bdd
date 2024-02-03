@@ -61,6 +61,8 @@ public class MainController implements Initializable {
     private TableView blood;
     @FXML
     private TableView donors;
+    @FXML
+    private Label numbl;
     private Donor selDonor;
     private ObservableList list;
 
@@ -116,13 +118,16 @@ public class MainController implements Initializable {
 
     private ArrayList dbArrayList(ResultSet rs) throws SQLException{
         ArrayList<BloodLetting> data = new ArrayList<>();
+        Integer i = 0;
         while (rs.next()){
+            i++;
             BloodLetting bl = new BloodLetting(rs.getInt(1),
                     LocalDate.parse(rs.getString("date")),
                     rs.getString("mark"),
-                    rs.getString("reason"));
+                    (rs.getString("reason")==null)? "Пр.здоров(а)":rs.getString("reason"));
             data.add(bl);
         }
+        numbl.setText("Найдено: "+i);
         return data;
     }
 
@@ -145,6 +150,7 @@ public class MainController implements Initializable {
         list.clear();
         blood.setItems(list);
         donors.setItems(Test.list);
+        numbl.setText("");
     }
     public void onSearchBtnClick(ActionEvent actionEvent) {
         String sbgroupe = new Bloodgroup(ce_bgroupe.getCode()).getGroupText();
