@@ -11,6 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e4d70ded-d52e-4bad-b7df-0400cc316494" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bdd.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpicker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpicker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpopup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpopup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Docpicker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Docpicker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/bdd.db" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/bdd.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" afterDir="false" />
@@ -57,7 +61,6 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-1.8.0_392-corretto-1.8.0_392-4caba194b151-3e25d5f1" />
         <option value="jdk-1.8.0_402-corretto-1.8.0_402-4caba194b151-ae57be32" />
       </set>
     </attachedChunks>

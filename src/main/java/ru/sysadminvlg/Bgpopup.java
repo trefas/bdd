@@ -12,6 +12,9 @@ public class Bgpopup extends AnchorPane {
     private int Code;
     private String Text;
     private Bloodgroup bgroup;
+    public Bloodgroup getBgroup() {
+        return bgroup;
+    }
     @FXML
     private ToggleGroup bg;
     @FXML

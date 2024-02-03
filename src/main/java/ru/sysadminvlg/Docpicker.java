@@ -20,7 +20,7 @@ public class Docpicker extends AnchorPane {
     public TextField document;
     public Document doc;
     public Docpicker(){
-        doc = new Document(TypeDoc.PAS,"",0,"", LocalDate.now());
+        doc = new Document(null,"",0,"", null);
         loadForm();
     }
     public Docpicker(Document doc){

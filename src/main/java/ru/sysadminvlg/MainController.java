@@ -64,6 +64,7 @@ public class MainController implements Initializable {
     @FXML
     private Label numbl;
     private Donor selDonor;
+    private Donor appDonor;
     private ObservableList list;
 
     @Override
@@ -76,6 +77,11 @@ public class MainController implements Initializable {
         donors.setItems(fdata);
         tf_surname.textProperty().addListener((observable, oldValue, newValue) ->
                 donors.setItems(filterList(Test.list, newValue.toLowerCase())));
+        tf_surname.focusedProperty().addListener((ov, oldV, newV) -> {
+            if(!newV && !tf_surname.getText().equals("") && selDonor==null){
+                btn_add.setDisable(false);
+            }
+        });
     }
 
     private ObservableList<Donor> filterList(List<Donor> list, String lowerCase) {
@@ -103,7 +109,7 @@ public class MainController implements Initializable {
             Connection con = DriverManager.getConnection("jdbc:sqlite::resource:bdd.db");
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM bloodletting left join prohibitions on bloodletting.id = prohibitions.blid where bloodletting.donor = "+selDonor.getId());
-            list = FXCollections.observableArrayList(dbArrayList(rs));
+            this.list = FXCollections.observableArrayList(dbArrayList(rs));
             con.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -114,6 +120,7 @@ public class MainController implements Initializable {
         FilteredList<BloodLetting> fbllist = new FilteredList<>(FXCollections.observableArrayList(list));
         blood.setItems(fbllist);
         btn_edit.setDisable(false);
+        btn_add.setDisable(true);
     }
 
     private ArrayList dbArrayList(ResultSet rs) throws SQLException{
@@ -147,10 +154,11 @@ public class MainController implements Initializable {
         tf_work.setText("");
         btn_add.setDisable(true);
         btn_edit.setDisable(true);
-        list.clear();
+        this.list.clear();
         blood.setItems(list);
         donors.setItems(Test.list);
         numbl.setText("");
+        selDonor = null;
     }
     public void onSearchBtnClick(ActionEvent actionEvent) {
         String sbgroupe = new Bloodgroup(ce_bgroupe.getCode()).getGroupText();
@@ -162,5 +170,29 @@ public class MainController implements Initializable {
             if(order.getBgroup().getGroupText().contains(searched)) fList.add(order);
         }
         return FXCollections.observableList(fList);
+    }
+
+    public void onDonorAppend(ActionEvent actionEvent) {
+        btn_add.setDisable(true);
+        Integer ndid;
+        try {
+            Connection con = DriverManager.getConnection("jdbc:sqlite::resource:bdd.db");
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select seq from sqlite_sequence where name=\"donors\"");
+            ndid = rs.getInt("seq") + 1;
+            appDonor = new Donor(ndid,
+                    tf_surname.getText(), tf_name.getText(),
+                    tf_patronim.getText(), dp_bday.getValue(),
+                    ce_bgroupe.getBg(), tf_phone.getText(),
+                    tf_work.getText(), ce_addr.getAddr(),
+                    ce_doc.getDoc());
+            Test.list.add(appDonor);
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void onDonorUpdate(ActionEvent actionEvent) {
     }
 }

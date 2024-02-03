@@ -15,15 +15,16 @@ import java.io.IOException;
 public class Bgpicker extends AnchorPane {
     @FXML
     private TextField tf;
-
+    private Bloodgroup bg;
+    public Bloodgroup getBg() {
+        return bg;
+    }
     public TextField getTf() {
         return tf;
     }
-
     public void setCode(int code) {
         Code = code;
     }
-
     private int Code;
     public int getCode() {
         return Code;
@@ -48,7 +49,7 @@ public class Bgpicker extends AnchorPane {
     private void btnClick() {
         if(tf.getText().matches("^(0\\(I\\)|A\\(II\\)|B\\(III\\)|AB\\(IV\\))(Rh[+-])? ?" +
                 "(D[+-]C[+-]E[+-]c[+-]e[+-]K[+-])?$")){
-            Bloodgroup bg = new Bloodgroup(tf.getText());
+            bg = new Bloodgroup(tf.getText());
             Code = bg.getCode();}
         Stage popup = new Stage();
         Bgpopup root = new Bgpopup(getCode());
@@ -60,6 +61,7 @@ public class Bgpicker extends AnchorPane {
         popup.show();
         root.getBtn().setOnAction(e -> {
             Code = root.getCode();
+            this.bg = new Bloodgroup(Code);
             tf.setText(root.getText());
             popup.close();
         });
@@ -68,7 +70,7 @@ public class Bgpicker extends AnchorPane {
         String s = tf.getText();
         if(s.matches("^(0\\(I\\)|A\\(II\\)|B\\(III\\)|AB\\(IV\\))(Rh[+-])? ?" +
                 "(D[+-]C[+-]E[+-]c[+-]e[+-]K[+-])?$")){
-            Bloodgroup bg = new Bloodgroup(tf.getText());
+            bg = new Bloodgroup(tf.getText());
             Code = bg.getCode();
         } else { if (!s.isEmpty()) {
             Alert al = new Alert(Alert.AlertType.WARNING);
