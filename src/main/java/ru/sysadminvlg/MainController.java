@@ -3,6 +3,7 @@ package ru.sysadminvlg;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -74,7 +75,9 @@ public class MainController implements Initializable {
         col_bday.setCellValueFactory(new PropertyValueFactory<Donor, String>("bday"));
         col_bgroupe.setCellValueFactory(new PropertyValueFactory<Donor, String>("BloodGroupe"));
         FilteredList<Donor> fdata = new FilteredList<>(FXCollections.observableArrayList(Test.list));
-        donors.setItems(fdata);
+        SortedList<Donor> sdata = new SortedList<>(fdata);
+        sdata.comparatorProperty().bind(donors.comparatorProperty());
+        donors.setItems(sdata);
         tf_surname.textProperty().addListener((observable, oldValue, newValue) ->
                 donors.setItems(filterList(Test.list, newValue.toLowerCase())));
         tf_surname.focusedProperty().addListener((ov, oldV, newV) -> {
@@ -93,34 +96,37 @@ public class MainController implements Initializable {
     }
     public void onDonorSelect(MouseEvent mouseEvent) {
         selDonor = (Donor) donors.getSelectionModel().getSelectedItem();
-        tf_surname.setText(selDonor.getSurname());
-        tf_name.setText(selDonor.getName());
-        tf_patronim.setText(selDonor.getPatronim());
-        dp_bday.setValue(selDonor.getBday());
-        tf_phone.setText(selDonor.getPhone());
-        ce_addr.setAddr(selDonor.getAddr());
-        ce_addr.address.setText(selDonor.getAddr().getFullTxt());
-        ce_doc.setDoc(selDonor.getDoc());
-        ce_doc.document.setText(selDonor.getDoc().toString());
-        ce_bgroupe.setCode(selDonor.getBgroup().getCode());
-        ce_bgroupe.getTf().setText(selDonor.getBloodGroupe());
-        tf_work.setText(selDonor.getWork());
-        try {
-            Connection con = DriverManager.getConnection("jdbc:sqlite::resource:bdd.db");
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM bloodletting left join prohibitions on bloodletting.id = prohibitions.blid where bloodletting.donor = "+selDonor.getId());
-            this.list = FXCollections.observableArrayList(dbArrayList(rs));
-            con.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if(selDonor!=null) {
+            tf_surname.setText(selDonor.getSurname());
+            tf_name.setText(selDonor.getName());
+            tf_patronim.setText(selDonor.getPatronim());
+            dp_bday.setValue(selDonor.getBday());
+            tf_phone.setText(selDonor.getPhone());
+            ce_addr.setAddr(selDonor.getAddr());
+            ce_addr.address.setText(selDonor.getAddr().getFullTxt());
+            ce_doc.setDoc(selDonor.getDoc());
+            ce_doc.document.setText(selDonor.getDoc().toString());
+            ce_bgroupe.setCode(selDonor.getBgroup().getCode());
+            ce_bgroupe.getTf().setText(selDonor.getBloodGroupe());
+            tf_work.setText(selDonor.getWork());
+            try {
+                Connection con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("SELECT * FROM bloodletting left join prohibitions on bloodletting.id = prohibitions.blid where bloodletting.donor = " + selDonor.getId());
+                this.list = FXCollections.observableArrayList(dbArrayList(rs));
+                con.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            col_date.setCellValueFactory(new PropertyValueFactory<BloodLetting, String>("date"));
+            col_med.setCellValueFactory(new PropertyValueFactory<BloodLetting, String>("reason"));
+            col_mark.setCellValueFactory(new PropertyValueFactory<BloodLetting, String>("mark"));
+            FilteredList<BloodLetting> fbllist = new FilteredList<>(FXCollections.observableArrayList(list));
+            blood.setItems(fbllist);
+            btn_edit.setDisable(false);
+            btn_add.setDisable(true);
+            btn_create.setDisable(false);
         }
-        col_date.setCellValueFactory(new PropertyValueFactory<BloodLetting, String>("date"));
-        col_med.setCellValueFactory(new PropertyValueFactory<BloodLetting, String>("reason"));
-        col_mark.setCellValueFactory(new PropertyValueFactory<BloodLetting, String>("mark"));
-        FilteredList<BloodLetting> fbllist = new FilteredList<>(FXCollections.observableArrayList(list));
-        blood.setItems(fbllist);
-        btn_edit.setDisable(false);
-        btn_add.setDisable(true);
     }
 
     private ArrayList dbArrayList(ResultSet rs) throws SQLException{
@@ -154,11 +160,15 @@ public class MainController implements Initializable {
         tf_work.setText("");
         btn_add.setDisable(true);
         btn_edit.setDisable(true);
-        this.list.clear();
-        blood.setItems(list);
-        donors.setItems(Test.list);
         numbl.setText("");
+        if (selDonor!=null&&this.list!=null) {
+            this.list.clear();
+            blood.setItems(list);
+        }
+        donors.setItems(Test.list);
+        donors.getSelectionModel().clearSelection();
         selDonor = null;
+        btn_create.setDisable(true);
     }
     public void onSearchBtnClick(ActionEvent actionEvent) {
         String sbgroupe = new Bloodgroup(ce_bgroupe.getCode()).getGroupText();
@@ -176,7 +186,7 @@ public class MainController implements Initializable {
         btn_add.setDisable(true);
         Integer ndid;
         try {
-            Connection con = DriverManager.getConnection("jdbc:sqlite::resource:bdd.db");
+            Connection con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select seq from sqlite_sequence where name=\"donors\"");
             ndid = rs.getInt("seq") + 1;
@@ -187,12 +197,106 @@ public class MainController implements Initializable {
                     tf_work.getText(), ce_addr.getAddr(),
                     ce_doc.getDoc());
             Test.list.add(appDonor);
+            st.executeUpdate("insert into donors (id,surname,name,patronim,bday,bgroup,phone,work)"
+                    +" values ("+ndid+", '"+appDonor.getSurname()+"', '"
+                    +appDonor.getName()+"', '"+appDonor.getPatronim()+"', '"
+                    +((appDonor.getBday()==null)? "1970-01-01":appDonor.getBday().toString())+"', "
+                    +appDonor.getBgroup().getCode()+", '"+appDonor.getPhone()
+                    +"', '"+appDonor.getWork()+"')");
+            if(appDonor.getAddr().getCity().equals("")&&appDonor.getAddr().getDistrict().equals("")
+            &&appDonor.getAddr().getRegion().equals("")&&appDonor.getAddr().getStreet().equals("")
+            &&appDonor.getAddr().getHouse().equals("")){
+                Alert al = new Alert(Alert.AlertType.WARNING);
+                al.setTitle("Адрес донора не добавлен!");
+                al.setHeaderText("Адрес донора не введен в базу.");
+                al.setContentText("Для корректного хранения информации о донорах указывайте адрес полностью.");
+                al.show();
+            } else {
+                st.executeUpdate("insert into addresses (id,region,district,city,street,house,corp,room)" +
+                        " values("+ndid+", '"+appDonor.getAddr().getRegion()+"', '"
+                        +appDonor.getAddr().getDistrict()+"', '"+appDonor.getAddr().getCity()+"', '"
+                        +appDonor.getAddr().getStreet()+"', '"+appDonor.getAddr().getHouse()+"', "
+                        +appDonor.getAddr().getCorp()+", "+appDonor.getAddr().getRoom()+")");
+            }
+            if(appDonor.getDoc().number.equals(0)&&appDonor.getDoc().serial.equals("")){
+                Alert al = new Alert(Alert.AlertType.WARNING);
+                al.setTitle("Документ донора не добавлен!");
+                al.setHeaderText("Удостоверение личности донора не добавлено в базу.");
+                al.setContentText("Для корректного хранения информации о донорах указывайте удостоверение личности.");
+                al.show();
+            } else {
+                st.executeUpdate("insert into documents (id,name,serial,number,issued,released) values("+
+                        ndid+", '"+appDonor.getDoc().name.toString()+"', '"+
+                        appDonor.getDoc().serial+"', "+appDonor.getDoc().number+
+                        ", '"+appDonor.getDoc().issued+"', '"+
+                        ((appDonor.getDoc().released==null)? "":appDonor.getDoc().released.toString())+ "')");
+            }
             con.close();
+            selDonor = appDonor;
+            btn_create.setDisable(false);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void onDonorUpdate(ActionEvent actionEvent) {
+        Integer did = selDonor.getId();
+        try {
+            Connection con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
+            Statement st = con.createStatement();
+            st.executeUpdate("update donors set surname='"+tf_surname.getText()+"', "+
+                    "name='"+tf_name.getText()+"', patronim='"+tf_patronim.getText()+
+                    "', bday='"+((dp_bday.getValue()==null)? "1970-01-01":dp_bday.getValue().toString())+
+                    "', bgroup="+
+                    ce_bgroupe.getCode()+", phone='"+tf_phone.getText()+"', work='"+
+                    tf_work.getText()+"' where id="+did);
+            ResultSet rs = st.executeQuery("select (select count(id) from documents where id="+did+
+                    ") as doc,(select count(id) from addresses where id="+did+") as addr");
+            boolean doc = rs.getInt("doc")==1; boolean addr = rs.getInt("addr")==1;
+            if(doc){
+                st.executeUpdate("update documents set name='"+ce_doc.getDoc().name.toString()+
+                        "', serial='" + ce_doc.getDoc().serial + "', number=" +
+                        ce_doc.getDoc().number + ", issued='"+
+                        ce_doc.getDoc().issued + "', released='"+
+                        ((ce_doc.getDoc().released==null)? "":ce_doc.getDoc().released.toString())+
+                        "' where id="+did);
+            } else if(!selDonor.getDoc().number.equals(0)||!selDonor.getDoc().serial.equals("")){
+                st.executeUpdate("insert into documents (id,name,serial,number,issued,released) values ("+
+                        did+", '"+ce_doc.getDoc().name.toString()+
+                        "', '" + ce_doc.getDoc().serial + "', " +
+                        ce_doc.getDoc().number + ", '"+
+                        ce_doc.getDoc().issued + "', '"+
+                        ((ce_doc.getDoc().released==null)? "":ce_doc.getDoc().released.toString())+"')");
+            }
+            if (addr){
+                st.executeUpdate("update addresses set region='"+ce_addr.getAddr().getRegion()+
+                        "', district='"+ce_addr.getAddr().getDistrict()+
+                        "', city='"+ce_addr.getAddr().getCity()+"', street='"+
+                        ce_addr.getAddr().getStreet()+"', house='"+
+                        ce_addr.getAddr().getHouse()+"', corp="+ce_addr.getAddr().getCorp()+
+                        ", room="+ce_addr.getAddr().getRoom()+" where id="+did);
+            } else if(!selDonor.getAddr().getCity().equals("")||!selDonor.getAddr().getDistrict().equals("")
+                    ||!selDonor.getAddr().getRegion().equals("")||!selDonor.getAddr().getStreet().equals("")
+                    ||!selDonor.getAddr().getHouse().equals("")) {
+                st.executeUpdate("insert into addresses (id,region,district,city,street,house,corp,room) values ("+
+                        did+", '"+ce_addr.getAddr().getRegion()+
+                        "', '"+ce_addr.getAddr().getDistrict()+
+                        "', '"+ce_addr.getAddr().getCity()+"', '"+
+                        ce_addr.getAddr().getStreet()+"', '"+
+                        ce_addr.getAddr().getHouse()+"', "+ce_addr.getAddr().getCorp()+
+                        ", "+ce_addr.getAddr().getRoom()+")");
+            }
+            Test.list.remove(selDonor);
+            appDonor = new Donor(did,
+                    tf_surname.getText(), tf_name.getText(),
+                    tf_patronim.getText(), dp_bday.getValue(),
+                    ce_bgroupe.getBg(), tf_phone.getText(),
+                    tf_work.getText(), ce_addr.getAddr(),
+                    ce_doc.getDoc());
+            Test.list.add(appDonor);
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

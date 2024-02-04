@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="bdd.jar" size="111598" download="eager" />
+    <jar href="bdd.jar" size="38449" download="eager" />
     <jar href="sqlite-jdbc-3.42.0.0.jar" size="13030515" download="eager" />
   </resources>
   <jfx:javafx-desc  width="600" height="400" main-class="ru.sysadminvlg.Test"  name="bdd" />

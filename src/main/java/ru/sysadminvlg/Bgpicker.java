@@ -45,6 +45,7 @@ public class Bgpicker extends AnchorPane {
             if(e.getCode() == KeyCode.ENTER) btnClick();
         });
         Code = 0;
+        bg = new Bloodgroup(0);
     }
     private void btnClick() {
         if(tf.getText().matches("^(0\\(I\\)|A\\(II\\)|B\\(III\\)|AB\\(IV\\))(Rh[+-])? ?" +

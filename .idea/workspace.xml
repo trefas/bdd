@@ -9,14 +9,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4d70ded-d52e-4bad-b7df-0400cc316494" name="Changes" comment="">
+    <list default="true" id="e4d70ded-d52e-4bad-b7df-0400cc316494" name="Changes" comment="day 11.1">
+      <change afterPath="$PROJECT_DIR$/bdd.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bdd.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.html" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jnlp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jnlp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpicker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpicker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpopup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Bgpopup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Docpicker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Docpicker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/bdd.db" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/bdd.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/bdd.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,23 +40,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Test.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.bdd [org.apache.maven.plugins:maven-deploy-plugin:3.1.1:deploy].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/aismn/AppData/Local/SceneBuilder/SceneBuilder.exe&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.Test.executor": "Run",
+    "Maven.bdd [org.apache.maven.plugins:maven-deploy-plugin:3.1.1:deploy].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/aismn/AppData/Local/SceneBuilder/SceneBuilder.exe",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Git\bdd\src" />
+      <recent name="D:\Git\bdd\src\main" />
       <recent name="G:\Projects\bdd\src\main\resources" />
     </key>
   </component>
@@ -74,9 +78,20 @@
       <option name="presentableId" value="Default" />
       <updated>1706770267415</updated>
     </task>
+    <task id="LOCAL-00001" summary="day 11.1">
+      <option name="closed" value="true" />
+      <created>1706984709231</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1706984709231</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="day 11.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="day 11.1" />
   </component>
 </project>

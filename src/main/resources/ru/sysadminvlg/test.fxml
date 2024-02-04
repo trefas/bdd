@@ -126,7 +126,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <Button fx:id="btn_create" mnemonicParsing="false" text="Создать">
+            <Button fx:id="btn_create" disable="true" mnemonicParsing="false" text="Создать">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>

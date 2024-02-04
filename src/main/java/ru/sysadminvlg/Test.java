@@ -17,7 +17,7 @@ public class Test extends Application {
     public static ObservableList list;
     {
         try {
-            con = DriverManager.getConnection("jdbc:sqlite::resource:bdd.db");
+            con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
             st = con.createStatement();
             rs = st.executeQuery("select * from donors left join addresses on donors.id=addresses.id left join documents on donors.id=documents.id");
             list = FXCollections.observableArrayList(dbArrayList(rs));
