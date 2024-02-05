@@ -10,11 +10,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.usermodel.*;
+import org.apache.xmlbeans.impl.schema.FileResourceLoader;
+
+import java.io.*;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -47,6 +54,10 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn col_phone;
     @FXML
+    private TableColumn col_blcount;
+    @FXML
+    private TableColumn col_bllast;
+    @FXML
     private DatePicker dp_bday;
     @FXML
     private TextField tf_name;
@@ -74,6 +85,8 @@ public class MainController implements Initializable {
         col_phone.setCellValueFactory(new PropertyValueFactory<Donor, String>("phone"));
         col_bday.setCellValueFactory(new PropertyValueFactory<Donor, String>("bday"));
         col_bgroupe.setCellValueFactory(new PropertyValueFactory<Donor, String>("BloodGroupe"));
+        col_blcount.setCellValueFactory(new PropertyValueFactory<Donor, Integer>("blcount"));
+        col_bllast.setCellValueFactory(new PropertyValueFactory<Donor, String>("bllast"));
         FilteredList<Donor> fdata = new FilteredList<>(FXCollections.observableArrayList(Test.list));
         SortedList<Donor> sdata = new SortedList<>(fdata);
         sdata.comparatorProperty().bind(donors.comparatorProperty());
@@ -152,9 +165,9 @@ public class MainController implements Initializable {
         dp_bday.getEditor().setText("");
         tf_phone.setText("");
         ce_addr.address.setText("");
-        ce_addr.setAddr(new Address("","","","","",0,0));
+        ce_addr.setAddr(null);
         ce_doc.document.setText("");
-        ce_doc.setDoc(new Document(TypeDoc.PAS,"",0,"",LocalDate.now()));
+        ce_doc.setDoc(null);
         ce_bgroupe.getTf().setText("");
         ce_bgroupe.setCode(0);
         tf_work.setText("");
@@ -195,13 +208,13 @@ public class MainController implements Initializable {
                     tf_patronim.getText(), dp_bday.getValue(),
                     ce_bgroupe.getBg(), tf_phone.getText(),
                     tf_work.getText(), ce_addr.getAddr(),
-                    ce_doc.getDoc());
+                    ce_doc.getDoc(), 0, null);
             Test.list.add(appDonor);
             st.executeUpdate("insert into donors (id,surname,name,patronim,bday,bgroup,phone,work)"
-                    +" values ("+ndid+", '"+appDonor.getSurname()+"', '"
+                    +" values ("+ndid+")r.setText( '"+appDonor.getSurname()+"', '"
                     +appDonor.getName()+"', '"+appDonor.getPatronim()+"', '"
                     +((appDonor.getBday()==null)? "1970-01-01":appDonor.getBday().toString())+"', "
-                    +appDonor.getBgroup().getCode()+", '"+appDonor.getPhone()
+                    +appDonor.getBgroup().getCode()+")r.setText( '"+appDonor.getPhone()
                     +"', '"+appDonor.getWork()+"')");
             if(appDonor.getAddr().getCity().equals("")&&appDonor.getAddr().getDistrict().equals("")
             &&appDonor.getAddr().getRegion().equals("")&&appDonor.getAddr().getStreet().equals("")
@@ -213,10 +226,10 @@ public class MainController implements Initializable {
                 al.show();
             } else {
                 st.executeUpdate("insert into addresses (id,region,district,city,street,house,corp,room)" +
-                        " values("+ndid+", '"+appDonor.getAddr().getRegion()+"', '"
+                        " values("+ndid+")r.setText( '"+appDonor.getAddr().getRegion()+"', '"
                         +appDonor.getAddr().getDistrict()+"', '"+appDonor.getAddr().getCity()+"', '"
                         +appDonor.getAddr().getStreet()+"', '"+appDonor.getAddr().getHouse()+"', "
-                        +appDonor.getAddr().getCorp()+", "+appDonor.getAddr().getRoom()+")");
+                        +appDonor.getAddr().getCorp()+")r.setText( "+appDonor.getAddr().getRoom()+")");
             }
             if(appDonor.getDoc().number.equals(0)&&appDonor.getDoc().serial.equals("")){
                 Alert al = new Alert(Alert.AlertType.WARNING);
@@ -226,9 +239,9 @@ public class MainController implements Initializable {
                 al.show();
             } else {
                 st.executeUpdate("insert into documents (id,name,serial,number,issued,released) values("+
-                        ndid+", '"+appDonor.getDoc().name.toString()+"', '"+
+                        ndid+")r.setText( '"+appDonor.getDoc().name.toString()+"', '"+
                         appDonor.getDoc().serial+"', "+appDonor.getDoc().number+
-                        ", '"+appDonor.getDoc().issued+"', '"+
+                        ")r.setText( '"+appDonor.getDoc().issued+"', '"+
                         ((appDonor.getDoc().released==null)? "":appDonor.getDoc().released.toString())+ "')");
             }
             con.close();
@@ -248,7 +261,7 @@ public class MainController implements Initializable {
                     "name='"+tf_name.getText()+"', patronim='"+tf_patronim.getText()+
                     "', bday='"+((dp_bday.getValue()==null)? "1970-01-01":dp_bday.getValue().toString())+
                     "', bgroup="+
-                    ce_bgroupe.getCode()+", phone='"+tf_phone.getText()+"', work='"+
+                    ce_bgroupe.getCode()+")r.setText( phone='"+tf_phone.getText()+"', work='"+
                     tf_work.getText()+"' where id="+did);
             ResultSet rs = st.executeQuery("select (select count(id) from documents where id="+did+
                     ") as doc,(select count(id) from addresses where id="+did+") as addr");
@@ -256,15 +269,15 @@ public class MainController implements Initializable {
             if(doc){
                 st.executeUpdate("update documents set name='"+ce_doc.getDoc().name.toString()+
                         "', serial='" + ce_doc.getDoc().serial + "', number=" +
-                        ce_doc.getDoc().number + ", issued='"+
+                        ce_doc.getDoc().number + ")r.setText( issued='"+
                         ce_doc.getDoc().issued + "', released='"+
                         ((ce_doc.getDoc().released==null)? "":ce_doc.getDoc().released.toString())+
                         "' where id="+did);
             } else if(!selDonor.getDoc().number.equals(0)||!selDonor.getDoc().serial.equals("")){
                 st.executeUpdate("insert into documents (id,name,serial,number,issued,released) values ("+
-                        did+", '"+ce_doc.getDoc().name.toString()+
+                        did+")r.setText( '"+ce_doc.getDoc().name.toString()+
                         "', '" + ce_doc.getDoc().serial + "', " +
-                        ce_doc.getDoc().number + ", '"+
+                        ce_doc.getDoc().number + ")r.setText( '"+
                         ce_doc.getDoc().issued + "', '"+
                         ((ce_doc.getDoc().released==null)? "":ce_doc.getDoc().released.toString())+"')");
             }
@@ -274,17 +287,17 @@ public class MainController implements Initializable {
                         "', city='"+ce_addr.getAddr().getCity()+"', street='"+
                         ce_addr.getAddr().getStreet()+"', house='"+
                         ce_addr.getAddr().getHouse()+"', corp="+ce_addr.getAddr().getCorp()+
-                        ", room="+ce_addr.getAddr().getRoom()+" where id="+did);
+                        ")r.setText( room="+ce_addr.getAddr().getRoom()+" where id="+did);
             } else if(!selDonor.getAddr().getCity().equals("")||!selDonor.getAddr().getDistrict().equals("")
                     ||!selDonor.getAddr().getRegion().equals("")||!selDonor.getAddr().getStreet().equals("")
                     ||!selDonor.getAddr().getHouse().equals("")) {
                 st.executeUpdate("insert into addresses (id,region,district,city,street,house,corp,room) values ("+
-                        did+", '"+ce_addr.getAddr().getRegion()+
+                        did+")r.setText( '"+ce_addr.getAddr().getRegion()+
                         "', '"+ce_addr.getAddr().getDistrict()+
                         "', '"+ce_addr.getAddr().getCity()+"', '"+
                         ce_addr.getAddr().getStreet()+"', '"+
                         ce_addr.getAddr().getHouse()+"', "+ce_addr.getAddr().getCorp()+
-                        ", "+ce_addr.getAddr().getRoom()+")");
+                        ")r.setText( "+ce_addr.getAddr().getRoom()+")");
             }
             Test.list.remove(selDonor);
             appDonor = new Donor(did,
@@ -292,11 +305,61 @@ public class MainController implements Initializable {
                     tf_patronim.getText(), dp_bday.getValue(),
                     ce_bgroupe.getBg(), tf_phone.getText(),
                     tf_work.getText(), ce_addr.getAddr(),
-                    ce_doc.getDoc());
+                    ce_doc.getDoc(), selDonor.getBlcount(), selDonor.getBllast());
             Test.list.add(appDonor);
             con.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void onBlCreate(ActionEvent actionEvent) {
+        System.out.println("Создаем документ ворд");
+        new TThread().start();
+    }
+
+    private class TThread extends Thread{
+        @Override
+        public void run() {
+            try {
+                XWPFDocument doc = new XWPFDocument(OPCPackage.open("templ.docx"));
+                for (XWPFParagraph p : doc.getParagraphs()){
+                    List<XWPFRun> runs = p.getRuns();
+                    if(runs != null){
+                        for (XWPFRun r : runs){
+                            String txt = r.getText(0);
+                            if(Objects.equals(txt, "curdate"))r.setText(LocalDate.now().toString(),0);
+                            if(Objects.equals(txt, "surname"))r.setText(selDonor.getSurname(),0);
+                            if(Objects.equals(txt, "name"))r.setText(selDonor.getName(),0);
+                            if(Objects.equals(txt, "patronim"))r.setText(selDonor.getPatronim(),0);
+                            if(Objects.equals(txt, "bday"))r.setText(selDonor.getBday().toString(),0);
+                            if(Objects.equals(txt, "addr"))r.setText(selDonor.getAddr().getFullTxt(),0);
+                            if(Objects.equals(txt, "work"))r.setText(selDonor.getWork(),0);
+                            if(Objects.equals(txt, "doc"))r.setText(selDonor.getDoc().toString(),0);
+                            if(Objects.equals(txt, "phone"))r.setText(selDonor.getPhone(),0);
+                            if(Objects.equals(txt, "fio"))r.setText(selDonor.getFullName(),0);
+                            }
+                    }
+                }
+                for (XWPFTable tbl : doc.getTables()) {
+                    for (XWPFTableRow row : tbl.getRows()) {
+                        for (XWPFTableCell cell : row.getTableCells()) {
+                            for (XWPFParagraph p : cell.getParagraphs()) {
+                                for (XWPFRun r : p.getRuns()) {
+                                    String txt = r.getText(0);
+                                    if(Objects.equals(txt, "pheno"))r.setText(selDonor.getBgroup().getPh().getTextCode(),0);
+                                    if(Objects.equals(txt, "bgtext"))r.setText(selDonor.getBgroup().getGroupTxt(),0);
+                                    if(Objects.equals(txt, "rh"))r.setText((selDonor.getBgroup().getRh())? "Rh+":"Rh-",0);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                doc.write(new FileOutputStream("output.docx"));
+            } catch (InvalidFormatException | IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            super.run();
         }
     }
 }

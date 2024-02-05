@@ -126,7 +126,7 @@
                   <Insets left="10.0" />
                </padding>
             </Label>
-            <Button fx:id="btn_create" disable="true" mnemonicParsing="false" text="Создать">
+            <Button fx:id="btn_create" disable="true" mnemonicParsing="false" text="Создать" onAction="#onBlCreate">
                <HBox.margin>
                   <Insets left="20.0" />
                </HBox.margin>
@@ -151,12 +151,14 @@
             </columnResizePolicy>
          </TableView>
       </VBox>
-      <TableView fx:id="donors" focusTraversable="false" onMouseClicked="#onDonorSelect" HBox.hgrow="ALWAYS">
+      <TableView fx:id="donors" minWidth="686" prefWidth="686" focusTraversable="false" onMouseClicked="#onDonorSelect" HBox.hgrow="ALWAYS">
          <columns>
             <TableColumn fx:id="col_fio" prefWidth="221.0" text="ФИО" />
             <TableColumn fx:id="col_bday" prefWidth="90.0" text="Дата рождения" />
             <TableColumn fx:id="col_phone" prefWidth="88.0" text="Телефон" />
             <TableColumn fx:id="col_bgroupe" prefWidth="137.0" text="Группа и фенотип" />
+            <TableColumn fx:id="col_blcount" prefWidth="60.0" text="Кол-во" />
+            <TableColumn fx:id="col_bllast" prefWidth="90.0" text="Последняя" />
          </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

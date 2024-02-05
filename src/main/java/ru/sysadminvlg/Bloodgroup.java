@@ -36,5 +36,10 @@ public class Bloodgroup {
         txt += (Code%2 == 1)? "Rh+":"Rh-";
         return txt;
     }
+    public String getGroupTxt(){
+        String[] groups = { "0(I)","A(II)","B(III)","AB(IV)" };
+        String txt = groups[getGroup()];
+        return txt;
+    }
     public String getFullText(){ return getGroupText() + " " + Ph.getTextCode(); }
 }

@@ -19,7 +19,7 @@ public class Test extends Application {
         try {
             con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
             st = con.createStatement();
-            rs = st.executeQuery("select * from donors left join addresses on donors.id=addresses.id left join documents on donors.id=documents.id");
+            rs = st.executeQuery("select donors.id, donors.surname, donors.name, donors.patronim, donors.bday, donors.bgroup, donors.phone, donors.work, addresses.region, addresses.district, addresses.city, addresses.street, addresses.house, addresses.corp, addresses.room, documents.name as typedoc, documents.serial, documents.number, documents.issued, documents.released, (select count(id) from bloodletting where donors.id=bloodletting.donor) as num, (select max(date) from bloodletting where bloodletting.donor=donors.id) as last from donors left join addresses on donors.id=addresses.id left join documents on donors.id=documents.id");
             list = FXCollections.observableArrayList(dbArrayList(rs));
             con.close();
         } catch (SQLException e) {
@@ -29,7 +29,7 @@ public class Test extends Application {
     private ArrayList dbArrayList(ResultSet rs)  throws SQLException {
         ArrayList<Donor> data = new ArrayList<>();
         while (rs.next()){
-            Donor donor = new Donor(rs.getInt(1),rs.getString("surname"),
+            Donor donor = new Donor(rs.getInt("id"),rs.getString("surname"),
                     rs.getString("name"), rs.getString("patronim"),
                     LocalDate.parse(rs.getString("bday")),
                     new Bloodgroup(rs.getInt("bgroup")),
@@ -42,11 +42,12 @@ public class Test extends Application {
                                     (rs.getString("house")==null)? "":rs.getString("house"),
                                     rs.getInt("corp"),
                                     rs.getInt("room")),
-                            new Document(TypeDoc.fromString(rs.getString(19)),
+                            new Document(TypeDoc.fromString(rs.getString("typedoc")),
                                     (rs.getString("serial")==null)? "":rs.getString("serial"),
                                     rs.getInt("number"),
                                     (rs.getString("issued")==null)? "":rs.getString("issued"),
-                                    (rs.getString("released")==null)? null:LocalDate.parse(rs.getString("released"))));
+                                    (rs.getString("released")==null)? null:LocalDate.parse(rs.getString("released"))),
+                    rs.getInt("num"), ((rs.getString("last")==null)? null:LocalDate.parse(rs.getString("last"))));
             data.add(donor);
         }
         return data;
