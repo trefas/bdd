@@ -9,19 +9,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4d70ded-d52e-4bad-b7df-0400cc316494" name="Changes" comment="day 11.1">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/BlController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/blForm.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/bdd.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/bdd.xml" afterDir="false" />
+    <list default="true" id="e4d70ded-d52e-4bad-b7df-0400cc316494" name="Changes" comment="day 13">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bdd.db" beforeDir="false" afterPath="$PROJECT_DIR$/bdd.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.db" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jnlp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jnlp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.docx" beforeDir="false" afterPath="$PROJECT_DIR$/output.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Donor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Donor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Address.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706984709231</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="day 13">
+      <option name="closed" value="true" />
+      <created>1707221814226</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1707221814226</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -122,6 +126,7 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="day 11.1" />
-    <option name="LAST_COMMIT_MESSAGE" value="day 11.1" />
+    <MESSAGE value="day 13" />
+    <option name="LAST_COMMIT_MESSAGE" value="day 13" />
   </component>
 </project>

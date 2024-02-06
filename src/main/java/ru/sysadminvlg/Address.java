@@ -35,9 +35,7 @@ public class Address {
     public void setDistrict(String district) {
         this.district = district;
     }
-    public String getCity() {
-        return city;
-    }
+    public String getCity() { return city; }
     public void setCity(String city) {
         this.city = city;
     }

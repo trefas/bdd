@@ -103,7 +103,7 @@ public class MainController implements Initializable {
         tf_surname.textProperty().addListener((observable, oldValue, newValue) ->
                 donors.setItems(filterList(Test.list, newValue.toLowerCase())));
         tf_surname.focusedProperty().addListener((ov, oldV, newV) -> {
-            if(!newV && !tf_surname.getText().equals("") && selDonor==null){
+            if(!newV && !tf_surname.getText().isEmpty() && selDonor==null){
                 btn_add.setDisable(false);
             }
         });
@@ -211,16 +211,16 @@ public class MainController implements Initializable {
             ndid = rs.getInt("seq") + 1;
             appDonor = new Donor(ndid,
                     tf_surname.getText(), tf_name.getText(),
-                    tf_patronim.getText(), dp_bday.getValue(),
+                    tf_patronim.getText(), ((dp_bday.getValue()==null)? LocalDate.parse("1970-01-01"):dp_bday.getValue()),
                     ce_bgroupe.getBg(), tf_phone.getText(),
                     tf_work.getText(), ce_addr.getAddr(),
                     ce_doc.getDoc(), 0, null);
             Test.list.add(appDonor);
             st.executeUpdate("insert into donors (id,surname,name,patronim,bday,bgroup,phone,work)"
-                    +" values ("+ndid+")r.setText( '"+appDonor.getSurname()+"', '"
+                    +" values ("+ndid+", '"+appDonor.getSurname()+"', '"
                     +appDonor.getName()+"', '"+appDonor.getPatronim()+"', '"
                     +((appDonor.getBday()==null)? "1970-01-01":appDonor.getBday().toString())+"', "
-                    +appDonor.getBgroup().getCode()+")r.setText( '"+appDonor.getPhone()
+                    +appDonor.getBgroup().getCode()+", '"+appDonor.getPhone()
                     +"', '"+appDonor.getWork()+"')");
             if(appDonor.getAddr().getCity().equals("")&&appDonor.getAddr().getDistrict().equals("")
             &&appDonor.getAddr().getRegion().equals("")&&appDonor.getAddr().getStreet().equals("")
@@ -232,10 +232,10 @@ public class MainController implements Initializable {
                 al.show();
             } else {
                 st.executeUpdate("insert into addresses (id,region,district,city,street,house,corp,room)" +
-                        " values("+ndid+")r.setText( '"+appDonor.getAddr().getRegion()+"', '"
+                        " values("+ndid+", '"+appDonor.getAddr().getRegion()+"', '"
                         +appDonor.getAddr().getDistrict()+"', '"+appDonor.getAddr().getCity()+"', '"
                         +appDonor.getAddr().getStreet()+"', '"+appDonor.getAddr().getHouse()+"', "
-                        +appDonor.getAddr().getCorp()+")r.setText( "+appDonor.getAddr().getRoom()+")");
+                        +appDonor.getAddr().getCorp()+", "+appDonor.getAddr().getRoom()+")");
             }
             if(appDonor.getDoc().number.equals(0)&&appDonor.getDoc().serial.equals("")){
                 Alert al = new Alert(Alert.AlertType.WARNING);
@@ -245,14 +245,15 @@ public class MainController implements Initializable {
                 al.show();
             } else {
                 st.executeUpdate("insert into documents (id,name,serial,number,issued,released) values("+
-                        ndid+")r.setText( '"+appDonor.getDoc().name.toString()+"', '"+
+                        ndid+", '"+appDonor.getDoc().name.toString()+"', '"+
                         appDonor.getDoc().serial+"', "+appDonor.getDoc().number+
-                        ")r.setText( '"+appDonor.getDoc().issued+"', '"+
+                        ", '"+appDonor.getDoc().issued+"', '"+
                         ((appDonor.getDoc().released==null)? "":appDonor.getDoc().released.toString())+ "')");
             }
             con.close();
             selDonor = appDonor;
             btn_create.setDisable(false);
+            donors.refresh();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -266,7 +267,7 @@ public class MainController implements Initializable {
                     "name='"+tf_name.getText()+"', patronim='"+tf_patronim.getText()+
                     "', bday='"+((dp_bday.getValue()==null)? "1970-01-01":dp_bday.getValue().toString())+
                     "', bgroup="+
-                    ce_bgroupe.getCode()+")r.setText( phone='"+tf_phone.getText()+"', work='"+
+                    ce_bgroupe.getCode()+", phone='"+tf_phone.getText()+"', work='"+
                     tf_work.getText()+"' where id="+did);
             ResultSet rs = st.executeQuery("select (select count(id) from documents where id="+did+
                     ") as doc,(select count(id) from addresses where id="+did+") as addr");
@@ -274,15 +275,15 @@ public class MainController implements Initializable {
             if(doc){
                 st.executeUpdate("update documents set name='"+ce_doc.getDoc().name.toString()+
                         "', serial='" + ce_doc.getDoc().serial + "', number=" +
-                        ce_doc.getDoc().number + ")r.setText( issued='"+
+                        ce_doc.getDoc().number + ", issued='"+
                         ce_doc.getDoc().issued + "', released='"+
                         ((ce_doc.getDoc().released==null)? "":ce_doc.getDoc().released.toString())+
                         "' where id="+did);
-            } else if(!selDonor.getDoc().number.equals(0)||!selDonor.getDoc().serial.equals("")){
+            } else if(!selDonor.getDoc().number.equals(0)|| !selDonor.getDoc().serial.equals("")){
                 st.executeUpdate("insert into documents (id,name,serial,number,issued,released) values ("+
-                        did+")r.setText( '"+ce_doc.getDoc().name.toString()+
+                        did+", '"+ce_doc.getDoc().name.toString()+
                         "', '" + ce_doc.getDoc().serial + "', " +
-                        ce_doc.getDoc().number + ")r.setText( '"+
+                        ce_doc.getDoc().number + ", '"+
                         ce_doc.getDoc().issued + "', '"+
                         ((ce_doc.getDoc().released==null)? "":ce_doc.getDoc().released.toString())+"')");
             }
@@ -292,17 +293,17 @@ public class MainController implements Initializable {
                         "', city='"+ce_addr.getAddr().getCity()+"', street='"+
                         ce_addr.getAddr().getStreet()+"', house='"+
                         ce_addr.getAddr().getHouse()+"', corp="+ce_addr.getAddr().getCorp()+
-                        ")r.setText( room="+ce_addr.getAddr().getRoom()+" where id="+did);
-            } else if(!selDonor.getAddr().getCity().equals("")||!selDonor.getAddr().getDistrict().equals("")
-                    ||!selDonor.getAddr().getRegion().equals("")||!selDonor.getAddr().getStreet().equals("")
-                    ||!selDonor.getAddr().getHouse().equals("")) {
+                        ", room="+ce_addr.getAddr().getRoom()+" where id="+did);
+            } else if(!selDonor.getAddr().getCity().equals("") || !selDonor.getAddr().getDistrict().equals("")
+                    || !selDonor.getAddr().getRegion().equals("") || !selDonor.getAddr().getStreet().equals("")
+                    || !selDonor.getAddr().getHouse().equals("")) {
                 st.executeUpdate("insert into addresses (id,region,district,city,street,house,corp,room) values ("+
-                        did+")r.setText( '"+ce_addr.getAddr().getRegion()+
+                        did+", '"+ce_addr.getAddr().getRegion()+
                         "', '"+ce_addr.getAddr().getDistrict()+
                         "', '"+ce_addr.getAddr().getCity()+"', '"+
                         ce_addr.getAddr().getStreet()+"', '"+
                         ce_addr.getAddr().getHouse()+"', "+ce_addr.getAddr().getCorp()+
-                        ")r.setText( "+ce_addr.getAddr().getRoom()+")");
+                        ", "+ce_addr.getAddr().getRoom()+")");
             }
             Test.list.remove(selDonor);
             appDonor = new Donor(did,
@@ -318,6 +319,7 @@ public class MainController implements Initializable {
         }
     }
     public void onBlCreate(ActionEvent actionEvent) {
+        this.list = FXCollections.observableArrayList();
         Stage popup = new Stage();
         BlController root = new BlController();
         HBox popupRoot = new HBox(root);
@@ -336,14 +338,12 @@ public class MainController implements Initializable {
                         ndid+", "+selDonor.getId()+", '"+root.getDp_date().getValue().toString()+
                         "', '"+root.getTf_mark().getText()+"')");
                 selDonor.setBlcount(selDonor.getBlcount()+1);
-
                 selDonor.setBllast(LocalDate.now());
-                this.list.add(new BloodLetting(ndid,LocalDate.now(),root.getTf_mark().getText(),
-                        (root.getTf_reason().getText().equals(""))? "Пр.здоров(а)":root.getTf_reason().getText()));
+                this.list.add(new BloodLetting(ndid,LocalDate.now(),root.getTf_mark().getText(),(root.getTf_reason().getText().equals(""))? "Пр.здоров(а)":root.getTf_reason().getText()));
                 blood.setItems(this.list);
                 numbl.setText("Найдено: "+selDonor.getBlcount().toString());
                 donors.refresh();
-                if(!root.getTf_reason().getText().equals("")) {
+                if(!root.getTf_reason().getText().isEmpty()) {
                     st.executeUpdate("insert into prohibitions (blid,reason,temp) values ("+
                             ndid+", '"+root.getTf_reason().getText()+"', 1)");
                 }
