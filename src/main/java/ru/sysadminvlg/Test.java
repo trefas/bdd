@@ -9,17 +9,19 @@ import javafx.stage.Stage;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 public class Test extends Application {
-    Connection con;
-    Statement st;
-    ResultSet rs;
     public static ObservableList list;
     {
         try {
-            con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
-            st = con.createStatement();
-            rs = st.executeQuery("select donors.id, donors.surname, donors.name, donors.patronim, donors.bday, donors.bgroup, donors.phone, donors.work, addresses.region, addresses.district, addresses.city, addresses.street, addresses.house, addresses.corp, addresses.room, documents.name as typedoc, documents.serial, documents.number, documents.issued, documents.released, (select count(id) from bloodletting where donors.id=bloodletting.donor) as num, (select max(date) from bloodletting where bloodletting.donor=donors.id) as last from donors left join addresses on donors.id=addresses.id left join documents on donors.id=documents.id");
+            Connection con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select donors.id, donors.surname, donors.name, donors.patronim, "+
+                    "donors.bday, donors.bgroup, donors.phone, donors.work, addresses.region, addresses.district, "+
+                    "addresses.city, addresses.street, addresses.house, addresses.corp, addresses.room, "+
+                    "documents.name as typedoc, documents.serial, documents.number, documents.issued, "+
+                    "documents.released, (select count(id) from bloodletting where donors.id=bloodletting.donor) "+
+                    "as num, (select max(date) from bloodletting where bloodletting.donor=donors.id) "+
+                    "as last from donors left join addresses on donors.id=addresses.id left join documents on donors.id=documents.id");
             list = FXCollections.observableArrayList(dbArrayList(rs));
             con.close();
         } catch (SQLException e) {

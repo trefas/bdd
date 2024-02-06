@@ -8,18 +8,24 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
-import org.apache.xmlbeans.impl.schema.FileResourceLoader;
 
+import java.awt.*;
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -314,7 +320,6 @@ public class MainController implements Initializable {
     }
 
     public void onBlCreate(ActionEvent actionEvent) {
-        System.out.println("Создаем документ ворд");
         new TThread().start();
     }
 
@@ -328,11 +333,11 @@ public class MainController implements Initializable {
                     if(runs != null){
                         for (XWPFRun r : runs){
                             String txt = r.getText(0);
-                            if(Objects.equals(txt, "curdate"))r.setText(LocalDate.now().toString(),0);
+                            if(Objects.equals(txt, "curdate"))r.setText(new SimpleDateFormat("dd MMMM y").format(new Date()),0);
                             if(Objects.equals(txt, "surname"))r.setText(selDonor.getSurname(),0);
                             if(Objects.equals(txt, "name"))r.setText(selDonor.getName(),0);
                             if(Objects.equals(txt, "patronim"))r.setText(selDonor.getPatronim(),0);
-                            if(Objects.equals(txt, "bday"))r.setText(selDonor.getBday().toString(),0);
+                            if(Objects.equals(txt, "bday"))r.setText(selDonor.getBday().format(DateTimeFormatter.ofPattern("dd MMMM y")),0);
                             if(Objects.equals(txt, "addr"))r.setText(selDonor.getAddr().getFullTxt(),0);
                             if(Objects.equals(txt, "work"))r.setText(selDonor.getWork(),0);
                             if(Objects.equals(txt, "doc"))r.setText(selDonor.getDoc().toString(),0);
@@ -358,6 +363,11 @@ public class MainController implements Initializable {
                 doc.write(new FileOutputStream("output.docx"));
             } catch (InvalidFormatException | IOException ex) {
                 throw new RuntimeException(ex);
+            }
+            try {
+                Desktop.getDesktop().open(new File("output.docx"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
             super.run();
         }
