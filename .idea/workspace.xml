@@ -10,16 +10,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4d70ded-d52e-4bad-b7df-0400cc316494" name="Changes" comment="day 11.1">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/BlController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/blForm.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/bdd.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/bdd.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bdd.db" beforeDir="false" afterPath="$PROJECT_DIR$/bdd.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.db" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jnlp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/bdd/bdd.jnlp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.docx" beforeDir="false" afterPath="$PROJECT_DIR$/output.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Donor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Donor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/MainController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/sysadminvlg/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ru/sysadminvlg/test.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />

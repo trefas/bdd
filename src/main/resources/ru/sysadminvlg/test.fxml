@@ -140,7 +140,7 @@
                </HBox.margin>
             </Label>
          </HBox>
-         <TableView fx:id="blood" VBox.vgrow="ALWAYS">
+         <TableView fx:id="blood" VBox.vgrow="ALWAYS" onMouseClicked="#onBloodLetSelect">
             <columns>
                <TableColumn fx:id="col_date" prefWidth="-1.0" text="Дата кроводачи" />
                <TableColumn fx:id="col_med" prefWidth="-1.0" text="Медотвод" />

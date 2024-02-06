@@ -7,16 +7,19 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.usermodel.*;
-
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
@@ -150,16 +153,14 @@ public class MainController implements Initializable {
 
     private ArrayList dbArrayList(ResultSet rs) throws SQLException{
         ArrayList<BloodLetting> data = new ArrayList<>();
-        Integer i = 0;
         while (rs.next()){
-            i++;
             BloodLetting bl = new BloodLetting(rs.getInt(1),
                     LocalDate.parse(rs.getString("date")),
                     rs.getString("mark"),
                     (rs.getString("reason")==null)? "Пр.здоров(а)":rs.getString("reason"));
             data.add(bl);
         }
-        numbl.setText("Найдено: "+i);
+        numbl.setText("Найдено: "+selDonor.getBlcount());
         return data;
     }
 
@@ -200,7 +201,6 @@ public class MainController implements Initializable {
         }
         return FXCollections.observableList(fList);
     }
-
     public void onDonorAppend(ActionEvent actionEvent) {
         btn_add.setDisable(true);
         Integer ndid;
@@ -257,7 +257,6 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
     public void onDonorUpdate(ActionEvent actionEvent) {
         Integer did = selDonor.getId();
         try {
@@ -318,12 +317,47 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
     public void onBlCreate(ActionEvent actionEvent) {
-        new TThread().start();
+        Stage popup = new Stage();
+        BlController root = new BlController();
+        HBox popupRoot = new HBox(root);
+        Scene popupScene = new Scene(popupRoot);
+        popup.setScene(popupScene);
+        popup.setTitle("Кроводача");
+        popup.initModality(Modality.APPLICATION_MODAL);
+        popup.show();
+        root.getBtn().setOnAction(e -> {
+            try {
+                Connection con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
+                Statement st = con.createStatement();
+                ResultSet rs = st.executeQuery("select seq from sqlite_sequence where name=\"bloodletting\"");
+                Integer ndid = rs.getInt("seq") + 1;
+                st.executeUpdate("insert into bloodletting (id,donor,date,mark) values ("+
+                        ndid+", "+selDonor.getId()+", '"+root.getDp_date().getValue().toString()+
+                        "', '"+root.getTf_mark().getText()+"')");
+                selDonor.setBlcount(selDonor.getBlcount()+1);
+
+                selDonor.setBllast(LocalDate.now());
+                this.list.add(new BloodLetting(ndid,LocalDate.now(),root.getTf_mark().getText(),
+                        (root.getTf_reason().getText().equals(""))? "Пр.здоров(а)":root.getTf_reason().getText()));
+                blood.setItems(this.list);
+                numbl.setText("Найдено: "+selDonor.getBlcount().toString());
+                donors.refresh();
+                if(!root.getTf_reason().getText().equals("")) {
+                    st.executeUpdate("insert into prohibitions (blid,reason,temp) values ("+
+                            ndid+", '"+root.getTf_reason().getText()+"', 1)");
+                }
+                con.close();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            new TThread().start();
+            popup.close();
+        });
     }
 
     private class TThread extends Thread{
+
         @Override
         public void run() {
             try {
@@ -370,6 +404,49 @@ public class MainController implements Initializable {
                 throw new RuntimeException(e);
             }
             super.run();
+        }
+    }
+    public void onBloodLetSelect(MouseEvent mouseEvent) {
+        BloodLetting selBL = (BloodLetting) blood.getSelectionModel().getSelectedItem();
+        if(selBL!=null){
+            Stage popup = new Stage();
+            BlController root = new BlController();
+            HBox popupRoot = new HBox(root);
+            Scene popupScene = new Scene(popupRoot);
+            popup.setScene(popupScene);
+            popup.setTitle("Кроводача");
+            popup.initModality(Modality.APPLICATION_MODAL);
+            root.getBtn().setText("Изменить");
+            popup.show();
+            blood.getSelectionModel().clearSelection();
+            root.getTf_mark().setText(selBL.getMark());
+            root.getDp_date().setValue(selBL.getDate());
+            root.getTf_reason().setText(selBL.getReason());
+            root.getBtn().setOnAction(e -> {
+                try {
+                    Connection con = DriverManager.getConnection("jdbc:sqlite:bdd.db");
+                    Statement st = con.createStatement();
+                    st.executeUpdate("update bloodletting set date='"
+                            +root.getDp_date().getValue().toString()+"', mark='"+
+                            root.getTf_mark().getText()+"' where id="+selBL.getId());
+                    ResultSet rs = st.executeQuery("select count(id) from prohibitions where blid="+selBL.getId());
+                    if(rs.getInt(1)==1){
+                        st.executeUpdate("update prohibitions set reason='"+
+                                root.getTf_reason().getText()+"' where blid="+selBL.getId());
+                    } else if(!root.getTf_reason().getText().equals("Пр.здоров(а)")) {
+                        st.executeUpdate("insert into prohibitions (blid,reason,temp)values ("+
+                                selBL.getId()+", '"+root.getTf_reason().getText()+"', 1)");
+                    }
+                    this.list.remove(selBL);
+                    this.list.add(new BloodLetting(selBL.getId(),root.getDp_date().getValue(),
+                            root.getTf_mark().getText(),root.getTf_reason().getText()));
+                    blood.setItems(this.list);
+                    con.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+                popup.close();
+            });
         }
     }
 }

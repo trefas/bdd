@@ -8,6 +8,15 @@ public class Donor {
     private Integer id;
     private String surname;
     private String name;
+
+    public void setBllast(LocalDate bllast) {
+        this.bllast = bllast;
+    }
+
+    public void setBlcount(Integer blcount) {
+        this.blcount = blcount;
+    }
+
     private String patronim;
     private LocalDate bday;
     private Bloodgroup bgroup;
